@@ -8,7 +8,8 @@ from Article.article_stripped import Article
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def parse_article(url:str) -> Article:
+
+def parse_article(url: str) -> Article:
     """
     Uses the Article class to parse a web article.
 
@@ -21,7 +22,10 @@ def parse_article(url:str) -> Article:
     article = Article(url)
     return article
 
-def kg_from_gpt4(article_text: str, max_edge_density: int, num_nodes: int, num_tokens: int) -> dict:
+
+def kg_from_gpt4(
+    article_text: str, max_edge_density: int, num_nodes: int, num_tokens: int
+) -> dict:
     """
     Generate a Knowledge Graph that explains the article text given certain constraints.
 
@@ -41,9 +45,9 @@ def kg_from_gpt4(article_text: str, max_edge_density: int, num_nodes: int, num_t
         num_tokens = 1000
         kg_data = kg_from_gpt4(article_text, max_edge_density, num_nodes, num_tokens)
     """
-    
+
     num_chars = min(len(article_text), 4 * num_tokens)
-    
+
     article_text = article_text[:num_chars]
 
     response = openai.ChatCompletion.create(
@@ -51,28 +55,27 @@ def kg_from_gpt4(article_text: str, max_edge_density: int, num_nodes: int, num_t
         messages=[
             {
                 "role": "system",
-                "content": f"Generate a Knowledge Graph that explains the article text given, given the constraints. The node and edge are described as dictionaries below:\nNode = {{\nid: (1/2/3...)\nlabel:(text label)\ncolor: HEX Code of light pastel color unique to the node that goes well with black text and line\n}}\nEdge = {{\nsrc: id of source node\ndst: id of dest node\nlabel: text label of edge\n}}\nReturn a compressed JSON object:\n{{ \"edges\": [list of edges],\n\"nodes\": [list of nodes]\n}}\nConstraints: \nMax edge density: number of edges per node = {max_edge_density}\nMax number of nodes = {num_nodes}"
+                "content": f'Generate a Knowledge Graph that explains the article text given, given the constraints. The node and edge are described as dictionaries below:\nNode = {{\nid: (1/2/3...)\nlabel:(text label)\ncolor: HEX Code of light pastel color unique to the node that goes well with black text and line\n}}\nEdge = {{\nsrc: id of source node\ndst: id of dest node\nlabel: text label of edge\n}}\nReturn a compressed JSON object:\n{{ "edges": [list of edges],\n"nodes": [list of nodes]\n}}\nConstraints: \nMax edge density: number of edges per node = {max_edge_density}\nMax number of nodes = {num_nodes}',
             },
-            {
-                "role": "user",
-                "content": f"Article: {article_text}"
-            },
+            {"role": "user", "content": f"Article: {article_text}"},
         ],
         temperature=0,
         max_tokens=3925,
         top_p=1,
         frequency_penalty=0,
-        presence_penalty=0
+        presence_penalty=0,
     )
-    
+
     data = response["choices"][0]["message"]["content"]
 
     json_data = json.loads(data)
-    
+
     return json_data
 
 
-def generate_graph(graph_name: str, graph_json: dict, directory: str, format: str="png"):
+def generate_graph(
+    graph_name: str, graph_json: dict, directory: str, format: str = "png"
+):
     """
     Create and render a graph using Graphviz based on the provided JSON data.
 
@@ -101,10 +104,12 @@ def generate_graph(graph_name: str, graph_json: dict, directory: str, format: st
 
     # Add nodes to the graph
     for node in graph_json["nodes"]:
-        knowledge_graph.node(str(node["id"]), label=node["label"], color=node["color"], style="filled")
+        knowledge_graph.node(
+            str(node["id"]), label=node["label"], color=node["color"], style="filled"
+        )
 
     # Add edges to the graph
     for edge in graph_json["edges"]:
         knowledge_graph.edge(str(edge["src"]), str(edge["dst"]), label=edge["label"])
-    
+
     knowledge_graph.render(graph_name, directory=directory, view=True)

@@ -23,15 +23,14 @@ def main():
         "Select number of tokens as context", 512, 4096, 2048, 512
     )
 
-    
-
-
     if st.button("Generate Knowledge Graph"):
         article = parse_article(url)
-        graph_json = kg_from_gpt4(article.text, max_edge_density, node_count, context_window)
+        graph_json = kg_from_gpt4(
+            article.text, max_edge_density, node_count, context_window
+        )
         graph_name = "_".join(article.title.split(" "))
         generate_graph(graph_name, graph_json, graphs_dir)
-        path = os.path.join(graphs_dir, graph_name+".png")
+        path = os.path.join(graphs_dir, graph_name + ".png")
         kg = Image.open(path)
         st.image(kg, caption="Processed Image", use_column_width=True)
         download_button(kg, "Download Processed Image")
