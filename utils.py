@@ -21,7 +21,7 @@ def parse_article(url:str) -> Article:
     article = Article(url)
     return article
 
-def openai_kg(article_text: str, max_edge_density: int, num_nodes: int, num_tokens: int) -> dict:
+def kg_from_gpt4(article_text: str, max_edge_density: int, num_nodes: int, num_tokens: int) -> dict:
     """
     Generate a Knowledge Graph that explains the article text given certain constraints.
 
@@ -39,7 +39,7 @@ def openai_kg(article_text: str, max_edge_density: int, num_nodes: int, num_toke
         max_edge_density = 3
         num_nodes = 10
         num_tokens = 1000
-        kg_data = openai_kg(article_text, max_edge_density, num_nodes, num_tokens)
+        kg_data = kg_from_gpt4(article_text, max_edge_density, num_nodes, num_tokens)
     """
     
     num_chars = min(len(article_text), 4 * num_tokens)
@@ -70,7 +70,6 @@ def openai_kg(article_text: str, max_edge_density: int, num_nodes: int, num_toke
     json_data = json.loads(data)
     
     return json_data
-
 
 
 def generate_graph(graph_name: str, graph_json: dict, directory: str, format: str="png"):
