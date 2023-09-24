@@ -17,7 +17,7 @@ def main():
 
     # Input max edge density and node count
     max_edge_density = st.slider("Select max edge density:", 2, 6, 3)
-    node_count = st.slider("Select node count:", 2, 15, 5)
+    node_count = st.slider("Select max node count:", 2, 15, 5)
     context_window = st.slider(
         "Select number of tokens as context", 512, 4096, 2048, 512
     )
@@ -32,19 +32,19 @@ def main():
         path = os.path.join(graphs_dir, graph_name + ".png")
         kg = Image.open(path)
         st.image(kg, caption=article.title, use_column_width=True)
-        download_button(kg, "Download Processed Image")
+        download_button(kg, "Download Knowledge Graph", graph_name+".png")
 
 
 # Function to create a custom download button for the image
-def download_button(object_to_download, download_button_text):
+def download_button(object_to_download, download_button_text, file_name, format="PNG"):
     # Save the image to a BytesIO object
     buffer = BytesIO()
-    object_to_download.save(buffer, format="PNG")
+    object_to_download.save(buffer, format=format)
     buffer.seek(0)
 
     # Generate a download button
     b64 = base64.b64encode(buffer.read()).decode()
-    st.download_button(label=download_button_text, data=buffer, key="processed_image")
+    st.download_button(label=download_button_text, data=buffer, key="processed_image", file_name=file_name)
 
 
 if __name__ == "__main__":

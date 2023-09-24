@@ -55,11 +55,11 @@ def kg_from_gpt4(
         messages=[
             {
                 "role": "system",
-                "content": f'Generate a Knowledge Graph that explains the article text given, given the constraints. The node and edge are described as dictionaries below:\nNode = {{\nid: (1/2/3...)\nlabel:(text label)\ncolor: HEX Code of light pastel color unique to the node that goes well with black text and line\n}}\nEdge = {{\nsrc: id of source node\ndst: id of dest node\nlabel: text label of edge\n}}\nReturn a compressed JSON object:\n{{ "edges": [list of edges],\n"nodes": [list of nodes]\n}}\nConstraints: \nMax edge density: number of edges per node = {max_edge_density}\nMax number of nodes = {num_nodes}',
+                "content": f'Generate a Knowledge Graph that explains the article text given, explains meaningful relationships and simplifies while adding context the article, given the constraints. The node and edge are described as dictionaries below:\nNode = {{\nid: (1/2/3...)\nlabel:(text label)\ncolor: HEX Code of light pastel color unique to the node that goes well with black text and line\n}}\nEdge = {{\nsrc: id of source node\ndst: id of dest node\nlabel: text label of edge\n}}\nReturn a compressed JSON object:\n{{ "edges": [list of edges],\n"nodes": [list of nodes]\n}}\nConstraints: \nMax edge density: number of edges per node = {max_edge_density}\nMax number of nodes = {num_nodes}',
             },
             {"role": "user", "content": f"Article: {article_text}"},
         ],
-        temperature=0,
+        temperature=0.4,
         max_tokens=3925,
         top_p=1,
         frequency_penalty=0,
