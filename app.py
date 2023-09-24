@@ -2,7 +2,6 @@ import base64
 import os
 from io import BytesIO
 
-import requests
 import streamlit as st
 from PIL import Image
 
@@ -32,7 +31,7 @@ def main():
         generate_graph(graph_name, graph_json, graphs_dir)
         path = os.path.join(graphs_dir, graph_name + ".png")
         kg = Image.open(path)
-        st.image(kg, caption="Processed Image", use_column_width=True)
+        st.image(kg, caption=article.title, use_column_width=True)
         download_button(kg, "Download Processed Image")
 
 
