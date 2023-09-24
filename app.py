@@ -1,8 +1,10 @@
-import streamlit as st
-import requests
-from PIL import Image
-from io import BytesIO
 import base64
+from io import BytesIO
+
+import requests
+import streamlit as st
+from PIL import Image
+
 
 # Define the Streamlit app
 def main():
@@ -14,7 +16,9 @@ def main():
     # Input max edge density and node count
     max_edge_density = st.slider("Select max edge density:", 2, 6, 3)
     node_count = st.slider("Select node count:", 2, 15, 5)
-    context_window = st.slider("Select number of tokens as context", 512, 4096, 2048, 512)
+    context_window = st.slider(
+        "Select number of tokens as context", 512, 4096, 2048, 512
+    )
 
     if st.button("Generate Knowledge Graph"):
         #  TO DO: add logic here
@@ -36,6 +40,7 @@ def download_button(object_to_download, download_button_text):
     # Generate a download button
     b64 = base64.b64encode(buffer.read()).decode()
     st.download_button(label=download_button_text, data=buffer, key="processed_image")
+
 
 if __name__ == "__main__":
     main()
