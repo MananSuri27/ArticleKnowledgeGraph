@@ -73,7 +73,31 @@ def openai_kg(article_text: str, max_edge_density: int, num_nodes: int, num_toke
 
 
 
-def graph(graph_name: str, graph_json: dict, directory: str, format: str="png"):
+def generate_graph(graph_name: str, graph_json: dict, directory: str, format: str="png"):
+    """
+    Create and render a graph using Graphviz based on the provided JSON data.
+
+    Args:
+        graph_name (str): The name of the graph.
+        graph_json (Dict): A dictionary containing the graph data with keys "nodes" and "edges."
+        directory (str): The directory where the graph will be saved.
+        format (str, optional): The format in which to render the graph (e.g., "png", "svg"). Default is "png".
+
+    Returns:
+        None
+
+    Example:
+        graph_data = {
+            "nodes": [
+                {"id": 1, "label": "Node 1", "color": "lightblue"},
+                {"id": 2, "label": "Node 2", "color": "lightgreen"},
+            ],
+            "edges": [
+                {"src": 1, "dst": 2, "label": "Edge 1-2"},
+            ],
+        }
+        generate_graph("MyGraph", graph_data, "/path/to/save", format="png")
+    """
     knowledge_graph = graphviz.Digraph(graph_name, format=format)
 
     # Add nodes to the graph
@@ -85,6 +109,3 @@ def graph(graph_name: str, graph_json: dict, directory: str, format: str="png"):
         knowledge_graph.edge(str(edge["src"]), str(edge["dst"]), label=edge["label"])
     
     knowledge_graph.render(graph_name, directory=directory, view=True)
-    
-
-    
