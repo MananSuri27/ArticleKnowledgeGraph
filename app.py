@@ -1,11 +1,13 @@
 import base64
-from io import BytesIO
 import os
+from io import BytesIO
+
 import requests
 import streamlit as st
 from PIL import Image
 
-from utils import generate_graph, parse_article, kg_from_gpt4
+from utils import generate_graph, kg_from_gpt4, parse_article
+
 graphs_dir = "./graphs"
 # Define the Streamlit app
 def main():
