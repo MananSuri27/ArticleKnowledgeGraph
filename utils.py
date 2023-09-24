@@ -73,5 +73,18 @@ def openai_kg(article_text: str, max_edge_density: int, num_nodes: int, num_toke
 
 
 
-def graph(graph_name: str, graph: dict, director: str):
+def graph(graph_name: str, graph_json: dict, directory: str, format: str="png"):
+    knowledge_graph = graphviz.Digraph(graph_name, format=format)
+
+    # Add nodes to the graph
+    for node in graph_json["nodes"]:
+        knowledge_graph.node(str(node["id"]), label=node["label"], color=node["color"], style="filled")
+
+    # Add edges to the graph
+    for edge in graph_json["edges"]:
+        knowledge_graph.edge(str(edge["src"]), str(edge["dst"]), label=edge["label"])
+    
+    knowledge_graph.render(graph_name, directory=directory, view=True)
+    
+
     
